@@ -1,0 +1,6 @@
+base_image: jeqo/azul-zulu:ubuntu-14.04
+organization: jeqo
+image_name: apache-kafka
+tags:
+  - latest
+  - ubuntu-0.9.0.1

@@ -1,0 +1,39 @@
+- hosts: 127.0.0.1
+  connection: local
+  vars_files:
+    - vars/main.yml
+  tasks:
+    - name: create container
+      docker:
+        name: tmp-zulu-ubuntu
+        image: "{{ base_image }}"
+        command: sleep infinity
+        state: started
+
+    - add_host:
+        name: tmp-zulu-ubuntu
+        groups: docker
+        ansible_connection: docker
+
+- hosts: tmp-zulu-ubuntu
+  connection: docker
+  roles:
+    - role: jeqo.apache-kafka
+      kafka_version: 0.9.0.1
+      kafka_scala_version: 2.11
+
+- hosts: 127.0.0.1
+  connection: local
+  vars_files:
+    - vars/main.yml
+  tasks:
+    - name: docker commit
+      command: "docker commit tmp-zulu-ubuntu {{ organization }}/{{ image_name }}:{{ item }}"
+      with_items: "{{ tags }}"
+
+    - name: docker push
+      command: "docker push {{ organization }}/{{ image_name }}:{{ item }}"
+      with_items: "{{ tags }}"
+
+    - name: docker kill
+      command: "docker kill tmp-zulu-ubuntu"
