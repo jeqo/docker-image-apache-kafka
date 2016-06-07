@@ -1,0 +1,16 @@
+- hosts: 127.0.0.1
+  connection: local
+  vars_files:
+    - vars/main.yml
+  tasks:
+    - name: build kafka server image
+      command: "docker build -t {{ image_name }}-server:{{ tag }} kafka-server"
+
+    - name: build zookeeper image
+      command: "docker build -t {{ image_name }}-zookeeper:{{ tag }} zookeeper"
+
+    - name: docker push
+      command: "docker push {{ image_name }}-server:{{ tag }}"
+
+    - name: docker push
+      command: "docker push {{ image_name }}-zookeeper:{{ tag }}"

@@ -1,6 +1,3 @@
-base_image: jeqo/azul-zulu:ubuntu-14.04
-organization: jeqo
-image_name: apache-kafka
-tags:
-  - latest
-  - ubuntu-0.9.0.1
+base_image: java:8-jdk
+image_name: jeqo/apache-kafka
+tag: 0.10.0.0-jdk8
