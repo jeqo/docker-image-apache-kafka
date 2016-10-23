@@ -1,15 +1,18 @@
 ---
 version: '2'
 services:
-    kafka:
-        image: jeqo/apache-kafka-server:0.10.0.0-jdk8
-        ports:
-            - "9092:9092"
-        depends_on:
-            - zookeeper
-        links:
-            - zookeeper
-    zookeeper:
-        image: jeqo/apache-kafka-zookeeper:0.10.0.0-jdk8
-        ports:
-         - "2181:2181"
+  client:
+    image: jeqo/apache-kafka:0.10.1.0
+    links:
+      - server:kafka
+    command: sleep infinity
+  server:
+    image: jeqo/apache-kafka-server:0.10.1.0
+    ports:
+      - 9092:9092
+    links:
+      - zookeeper
+  zookeeper:
+    image: jeqo/apache-kafka-zookeeper:0.10.1.0
+    ports:
+      - 2181:2181

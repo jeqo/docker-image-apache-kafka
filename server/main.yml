@@ -1,12 +1,10 @@
 - hosts: localhost
   connection: local
   vars:
-    image: jeqo/apache-kafka
+    image: jeqo/apache-kafka-server
     tag: 0.10.1.0
   tasks:
-    - name: build kafka base image
+    - name: build kafka server image
       command: docker build -t jeqo/{{image}}:{{tag}} .
-    - name: push kafka base image
+    - name: push kafka server image
       command: docker push jeqo/{{image}}:{{tag}}
-- include: zookeeper/main.yml
-- include: server/main.yml

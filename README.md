@@ -1,2 +1,2 @@
-# docker-image-apache-kafka
+# Docker Image: Apache Kafka
 docker image: apache kafka

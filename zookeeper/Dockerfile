@@ -1,11 +1,7 @@
-FROM tmp-apache-kafka
+FROM jeqo/apache-kafka:0.10.1.0
 
 MAINTAINER Jorge Quilcate <jorge.quilcate@sysco.no>
 
-USER kafka
+EXPOSE 2181
 
-ENV KAFKA_HOME /opt/apache/kafka/kafka_2.11-0.10.0.0
-
-WORKDIR $KAFKA_HOME
-
-CMD ["sh", "-c", "bin/zookeeper-server-start.sh config/zookeeper.properties"]
+CMD [ "zookeeper-server-start.sh", "config/zookeeper.properties" ]
