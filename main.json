@@ -1,0 +1,44 @@
+{
+  "variables": {
+    "kafka_home": "/opt/apache-kafka",
+    "kafka_user": "kafka",
+    "kafka_group": "kafka",
+    "kafka_version": "0.10.1.0",
+    "kafka_scala_version": "2.11"
+  },
+  "builders": [
+    {
+      "type": "docker",
+      "image": "openjdk:8-jre",
+      "commit": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "install.sh",
+      "environment_vars": [
+        "KAFKA_PKG=kafka_{{user `kafka_scala_version`}}-{{user `kafka_version`}}",
+        "KAFKA_URL=http://apache.uib.no/kafka/{{user `kafka_version`}}/kafka_{{user `kafka_scala_version`}}-{{user `kafka_version`}}.tgz",
+        "KAFKA_USER={{user `kafka_user`}}",
+        "KAFKA_GROUP={{user `kafka_group`}}",
+        "KAFKA_HOME={{user `kafka_home`}}"
+      ]
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "jeqo/apache-kafka",
+        "tag": "{{user `kafka_version`}}_{{user `kafka_scala_version`}}"
+      },
+      {
+        "type": "docker-dockerfile",
+        "maintainer": "Jorge Quilcate <quilcate.jorge@gmail.com>",
+        "workdir": "{{user `kafka_home`}}",
+        "cmd": ["bash"]
+      }
+    ]
+  ]
+}

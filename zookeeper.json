@@ -1,0 +1,29 @@
+{
+  "variables": {
+    "kafka_version": "0.10.1.0",
+    "kafka_scala_version": "2.11"
+  },
+  "builders": [
+    {
+      "type": "docker",
+      "image": "jeqo/apache-kafka:{{user `kafka_version`}}_{{user `kafka_scala_version`}}",
+      "pull": false,
+      "commit": true
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "jeqo/apache-kafka-zk",
+        "tag": "{{user `kafka_version`}}_{{user `kafka_scala_version`}}"
+      },
+      {
+        "type": "docker-dockerfile",
+        "maintainer": "Jorge Quilcate <quilcate.jorge@gmail.com>",
+        "expose": ["2181"],
+        "cmd": ["bin/zookeeper-server-start.sh", "config/zookeeper.properties"]
+      }
+    ]
+  ]
+}

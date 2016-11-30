@@ -7,12 +7,12 @@ services:
       - server:kafka
     command: sleep infinity
   server:
-    image: jeqo/apache-kafka-server:0.10.1.0
+    image: jeqo/apache-kafka-server:0.10.1.0_2.11
     ports:
       - 9092:9092
     links:
       - zookeeper
   zookeeper:
-    image: jeqo/apache-kafka-zookeeper:0.10.1.0
+    image: jeqo/apache-kafka-zk:0.10.1.0_2.11
     ports:
       - 2181:2181

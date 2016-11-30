@@ -1,0 +1,50 @@
+{
+  "variables": {
+    "kafka_home": "/opt/apache-kafka",
+    "kafka_logs_dir": "/tmp/kafka-logs",
+    "kafka_version": "0.10.1.0",
+    "kafka_scala_version": "2.11"
+  },
+  "builders": [
+    {
+      "type": "docker",
+      "image": "jeqo/apache-kafka:{{user `kafka_version`}}_{{user `kafka_scala_version`}}",
+      "pull": false,
+      "commit": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "kafka-entrypoint.sh",
+      "destination": "/docker-entrypoint.sh"
+    },
+    {
+      "type": "shell",
+      "inline": "chmod +x /docker-entrypoint.sh"
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "jeqo/apache-kafka-server",
+        "tag": "{{user `kafka_version`}}_{{user `kafka_scala_version`}}"
+      },
+      {
+        "type": "docker-dockerfile",
+        "maintainer": "Jorge Quilcate <quilcate.jorge@gmail.com>",
+        "expose": ["9092"],
+        "env": {
+          "ZOOKEEPER_CONNECT": "zookeeper:2181",
+          "BROKER_ID": "1",
+          "LOG_DIRS": "{{user `kafka_logs_dir`}}",
+          "NUM_PARTITION": "1"
+        },
+        "volume": ["{{user `kafka_logs_dir`}}"],
+        "entrypoint": ["/docker-entrypoint.sh"],
+        "cmd": ["bin/kafka-server-start.sh", "config/server.properties"]
+      }
+    ]
+  ]
+}
