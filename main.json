@@ -46,7 +46,6 @@
         "expose": ["9092"],
         "env": {
           "ZOOKEEPER_CONNECT": "zookeeper:2181",
-          "BROKER_ID": "1",
           "LOG_DIRS": "{{user `kafka_logs_dir`}}",
           "NUM_PARTITION": "1"
         },
