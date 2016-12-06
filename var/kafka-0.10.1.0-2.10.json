@@ -1,6 +1,6 @@
 {
   "kafka_home": "/opt/apache-kafka",
   "kafka_version": "0.10.1.0",
-  "kafka_scala_version": "2.11",
+  "kafka_scala_version": "2.10",
   "kafka_logs_dir": "/tmp/kafka-logs"
 }

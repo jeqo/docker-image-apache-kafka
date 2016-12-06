@@ -52,7 +52,8 @@
         "volume": ["{{user `kafka_logs_dir`}}"],
         "entrypoint": ["/docker-entrypoint.sh"],
         "cmd": ["bin/kafka-server-start.sh", "config/server.properties"]
-      }
+      },
+      "docker-push"
     ]
   ]
 }
