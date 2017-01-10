@@ -1,0 +1,39 @@
+FROM openjdk:8-jre
+
+MAINTAINER Jorge Quilcate <quilcate.jorge@gmail.com>
+
+ARG kafka_version
+ARG kafka_scala_version
+ARG kafka_base_url
+
+ENV KAFKA_VERSION ${kafka_version:-0.10.1.0}
+ENV KAFKA_SCALA_VERSION ${kafka_scala_version:-2.11}
+
+ENV KAFKA_BASE_URL ${kafka_base_url:-http://apache.uib.no}
+ENV KAFKA_URL "$KAFKA_BASE_URL/kafka/$KAFKA_VERSION/kafka_$KAFKA_SCALA_VERSION-$KAFKA_VERSION.tgz"
+ENV KAFKA_HOME /opt/kafka
+ENV KAFKA_LOGS /tmp/kafka-logs
+
+ENV ZOOKEEPER_CONNECT zookeeper:2181
+ENV NUM_PARTITION 1
+
+WORKDIR /opt
+
+RUN wget -O - $KAFKA_URL | tar zxf - && \
+    mv /opt/kafka_$KAFKA_SCALA_VERSION-$KAFKA_VERSION $KAFKA_HOME
+
+WORKDIR $KAFKA_HOME
+
+EXPOSE 9092
+
+VOLUME $KAFKA_LOGS
+
+COPY docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+CMD ["bin/kafka-server-start.sh", "config/server.properties"]
+
+HEALTHCHECK --interval=5s --timeout=3s \
+ CMD bin/kafka-topics.sh --zookeeper $ZOOKEEPER_CONNECT --list || exit 1
