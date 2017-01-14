@@ -2,11 +2,14 @@
   vars:
     kafka_version: 0.10.1.0
     kafka_scala_version: 2.11
+    push: no
+    nocache: no
   tasks:
     - set_fact:
         base_image: jeqo/apache-kafka-base
         kafka_image: jeqo/apache-kafka:{{ kafka_version }}-{{ kafka_scala_version }}
         zookeeper_image: jeqo/apache-kafka-zookeeper:{{ kafka_version }}-{{ kafka_scala_version }}
+        client_image: jeqo/apache-kafka-client:{{ kafka_version }}-{{ kafka_scala_version }}
 
     - name: building {{ base_image }}
       docker_image:
@@ -25,8 +28,8 @@
         name: "{{ kafka_image }}"
         path: kafka
         force: yes
-        nocache: yes
-        push: yes
+        nocache: "{{ nocache }}"
+        push: "{{ push }}"
         pull: no
       register: result
 
@@ -35,8 +38,21 @@
         name: "{{ zookeeper_image }}"
         path: zookeeper
         force: yes
-        nocache: yes
-        push: yes
+        nocache: "{{ nocache }}"
+        push: "{{ push }}"
+        pull: no
+      register: result
+
+    - debug:
+        var: result
+
+    - name: building {{ client_image }}
+      docker_image:
+        name: "{{ client_image }}"
+        path: client
+        force: yes
+        nocache: "{{ nocache }}"
+        push: "{{ push }}"
         pull: no
       register: result
 
