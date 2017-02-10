@@ -7,13 +7,14 @@ services:
       - server:kafka
     command: sleep infinity
   server:
-    image: jeqo/apache-kafka:0.10.1.0_2.11
+    image: jeqo/apache-kafka:0.10.1.1-2.11
     environment:
-      ZOOKEEPER_CONNECT: zookeeper:2818
+      ZOOKEEPER_CONNECT: zk1:2818
     links:
-      - zookeeper
-  zookeeper:
-    image: jeqo/apache-zookeeper:3.4.9
+      - zk1
+  zk1:
+    image: jeqo/apache-kafka-zookeeper:0.10.1.1-2.11
     volumes:
-      - ./zoo.cfg:/opt/apache-zookeeper/conf/zoo.cfg
+      - ./zookeeper:/config
       - ./zk/logs:/var/zookeeper
+    command: ["bin/zookeeper-server-start.sh", "/config/zookeeper.properties"]
