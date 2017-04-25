@@ -37,4 +37,3 @@ services:
     volumes:
       - ./zookeeper:/zookeeper/config
       - ./zk/logs/1:/var/zookeeper
-    #command: ["bin/zookeeper-server-start.sh", "/zookeeper/config/zookeeper.properties"]

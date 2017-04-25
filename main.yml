@@ -1,6 +1,6 @@
 - hosts: localhost
   vars:
-    kafka_version: 0.10.1.1
+    kafka_version: 0.10.2.0
     kafka_scala_version: 2.11
     push: no
     nocache: no
